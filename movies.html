@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Show Buttons</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 40px 20px 20px 20px;
+    }
+
+    .home-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #00b894;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .home-link:hover {
+      background-color: #019875;
+    }
+
+    #searchInput {
+      display: block;
+      width: 80%;
+      max-width: 400px;
+      margin: 80px auto 40px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background-color: #2c2c2c;
+      color: white;
+    }
+
+    #showsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .show-button {
+      position: relative;
+      width: 200px;
+      height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease;
+    }
+
+    .show-button:hover {
+      transform: scale(1.05);
+    }
+
+    .show-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      padding: 15px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      text-align: left;
+    }
+
+    .show-button:hover .overlay {
+      transform: translateY(0);
+    }
+
+    .overlay h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .overlay p {
+      margin: 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="https://trxstanxd.github.io/tristans-movies" class="home-link">🏠 Home</a>
+
+  <input type="text" id="searchInput" placeholder="Search movies..." oninput="filterShows()">
+
+  <div id="showsContainer">
+    <a href="https://multiembed.mov/directstream.php?video_id=tt0133093" class="show-button">
+      <img src="https://m.media-amazon.com/images/I/613ypTLZHsL._UF894,1000_QL80_.jpg" alt="The Matrix">
+      <div class="overlay">
+        <h3>The Matrix</h3>
+        <p>When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.</p>
+      </div>
+    </a>
+
+    <a href="https://multiembed.mov/directstream.php?video_id=tt1375666" class="show-button">
+      <img src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg" alt="Inception">
+      <div class="overlay">
+        <h3>Inception</h3>
+        <p>A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.</p>
+      </div>
+    </a>
+
+    <a href="https://multiembed.mov/directstream.php?video_id=tt1285016" class="show-button">
+      <img src="https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/02/23130935/n0ybibhJtQ5icDqTp8eRytcIHJx-scaled.jpg" alt="The Social Network">
+      <div class="overlay">
+        <h3>The Social Network</h3>
+        <p>As Harvard student Mark Zuckerberg creates the social networking site that would become known as Facebook, he is sued by the twins who claimed he stole their idea and by the co-founder who was later squeezed out of the business.</p>
+      </div>
+    </a>
+  </div>
+
+  <script>
+    function filterShows() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const buttons = document.querySelectorAll(".show-button");
+
+      buttons.forEach(button => {
+        const text = button.textContent.toLowerCase();
+        button.style.display = input === "" || text.includes(input) ? "block" : "none";
+      });
+    }
+  </script>
+</body>
+</html>
