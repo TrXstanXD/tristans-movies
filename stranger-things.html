@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Watch Stranger Things</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+     .home-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #00b894;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      z-index: 1000;
+    }
+    .home-link:hover {
+      background-color: #019875;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    .controls {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    label {
+      font-size: 18px;
+    }
+    select, button {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #00b894;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #019875;
+    }
+    .episode-info {
+      margin-top: 25px;
+      max-width: 600px;
+    }
+    .episode-info h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .episode-info p {
+      font-size: 16px;
+      color: #cccccc;
+    }
+  </style>
+</head>
+<body>
+  <a href="https://trxstanxd.github.io/tristans-movies" class="home-link">🏠 Home</a>
+  <h1>Stranger Things Episode Picker</h1>
+  <div class="controls">
+    <label for="seasonSelect">Season:</label>
+    <select id="seasonSelect" onchange="updateEpisodes()">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <label for="episodeSelect">Episode:</label>
+    <select id="episodeSelect" onchange="updateEpisodeInfo()"></select>
+    <button id="watchButton" onclick="openInNewTab()">Watch Now</button>
+  </div>
+  <div class="episode-info" id="episodeInfo"></div>
+  <script>
+    const episodesPerSeason = { "1": 8, "2": 9, "3": 8, "4": 9, "5": 10 };
+   const episodeData = {
+  "1-1": {
+    title: "Chapter One: The Vanishing of Will Byers",
+    description: "A young boy mysteriously disappears, and a small town uncovers a secret involving secret experiments, terrifying supernatural forces, and one strange little girl."
+  },
+  "1-2": {
+    title: "Chapter Two: The Weirdo on Maple Street",
+    description: "Mike hides Eleven in his house; the boys begin to suspect something more is going on with Will’s disappearance."
+  },
+  "1-3": {
+    title: "Chapter Three: Holly, Jolly",
+    description: "Nancy looks for Barb; Joyce receives an unsettling message; the boys learn more about Eleven’s abilities."
+  },
+  "1-4": {
+    title: "Chapter Four: The Body",
+    description: "A body is found, but Jonathan and Nancy question whether it’s really Will; Hopper digs deeper into Hawkins Lab."
+  },
+  "1-5": {
+    title: "Chapter Five: The Flea and the Acrobat",
+    description: "The boys try to find a portal to another dimension; Hopper confronts the lab."
+  },
+  "1-6": {
+    title: "Chapter Six: The Monster",
+    description: "Jonathan and Nancy try to trap the Demogorgon; Eleven remembers more about her past."
+  },
+  "1-7": {
+    title: "Chapter Seven: The Bathtub",
+    description: "The gang builds a sensory deprivation tank to help Eleven find Will."
+  },
+  "1-8": {
+    title: "Chapter Eight: The Upside Down",
+    description: "Hopper and Joyce enter the Upside Down; Eleven faces off with the Demogorgon."
+  },
+"2-1": {
+  title: "Chapter One: MADMAX",
+  description: "As the town prepares for Halloween, a high-scoring newcomer shakes up the arcade, and Will continues to see visions from the Upside Down."
+},
+"2-2": {
+  title: "Chapter Two: Trick or Treat, Freak",
+  description: "After a strange Halloween night, Mike questions Eleven’s whereabouts, and Will’s episodes grow worse."
+},
+"2-3": {
+  title: "Chapter Three: The Pollywog",
+  description: "Dustin adopts a strange creature, Eleven tries to reconnect with Mike, and Will’s behavior becomes more erratic."
+},
+"2-4": {
+  title: "Chapter Four: Will the Wise",
+  description: "Will’s possession by the Shadow Monster intensifies, while Eleven makes a discovery in Hopper's cabin."
+},
+"2-5": {
+  title: "Chapter Five: Dig Dug",
+  description: "Hopper becomes trapped in the tunnels, and Eleven sets out to find her mother."
+},
+"2-6": {
+  title: "Chapter Six: The Spy",
+  description: "Will’s link to the monster leads to disaster at the lab, and Mike finally learns what happened to Eleven."
+},
+"2-7": {
+  title: "Chapter Seven: The Lost Sister",
+  description: "Eleven finds a group of outcasts with powers like hers, forcing her to choose between revenge and home."
+},
+"2-8": {
+  title: "Chapter Eight: The Mind Flayer",
+  description: "As the Mind Flayer attacks the lab, the kids must work together to survive."
+},
+"2-9": {
+  title: "Chapter Nine: The Gate",
+  description: "Eleven returns to close the gate as the group faces off against the creatures of the Upside Down."
+},
+"3-1": {
+  title: "Chapter One: Suzie, Do You Copy?",
+  description: "Summer brings new jobs and budding romance, but danger looms as Dustin hears something on his radio."
+},
+"3-2": {
+  title: "Chapter Two: The Mall Rats",
+  description: "Nancy and Jonathan follow a lead; the kids spy on Billy, and Hopper confronts Joyce’s erratic behavior."
+},
+"3-3": {
+  title: "Chapter Three: The Case of the Missing Lifeguard",
+  description: "Nancy and Jonathan discover disturbing evidence, while Eleven and Max spy on Billy."
+},
+"3-4": {
+  title: "Chapter Four: The Sauna Test",
+  description: "The group devises a plan to trap Billy and test if he’s possessed by the Mind Flayer."
+},
+"3-5": {
+  title: "Chapter Five: The Flayed",
+  description: "Hopper and Joyce uncover a secret lab; the kids face off with possessed townspeople."
+},
+"3-6": {
+  title: "Chapter Six: E Pluribus Unum",
+  description: "Eleven ventures into Billy’s mind; Hopper’s team infiltrates the lab."
+},
+"3-7": {
+  title: "Chapter Seven: The Bite",
+  description: "As the Fourth of July fireworks light up the sky, terror descends on Hawkins Mall."
+},
+"3-8": {
+  title: "Chapter Eight: The Battle of Starcourt",
+  description: "The gang fights for their lives at the mall, and sacrifices are made to save Hawkins."
+},
+"4-1": {
+  title: "Chapter One: The Hellfire Club",
+  description: "Six months after Starcourt, the group faces high school struggles, a new D&D game, and a deadly new threat."
+},
+"4-2": {
+  title: "Chapter Two: Vecna’s Curse",
+  description: "A shaken Max deals with traumatic visions; Hopper's fate is revealed in Russia."
+},
+"4-3": {
+  title: "Chapter Three: The Monster and the Superhero",
+  description: "Eleven faces consequences at school; Nancy and Robin chase a lead."
+},
+"4-4": {
+  title: "Chapter Four: Dear Billy",
+  description: "Max becomes Vecna’s next target, leading to an emotional confrontation with death."
+},
+"4-5": {
+  title: "Chapter Five: The Nina Project",
+  description: "El travels to a secret facility to regain her powers; Joyce and Murray plot a rescue."
+},
+"4-6": {
+  title: "Chapter Six: The Dive",
+  description: "Steve dives into danger, and Eleven explores painful memories in the lab."
+},
+"4-7": {
+  title: "Chapter Seven: The Massacre at Hawkins Lab",
+  description: "El's darkest memory is revealed, and the origin of Vecna is finally uncovered."
+},
+"4-8": {
+  title: "Chapter Eight: Papa",
+  description: "Dr. Brenner’s true intentions are revealed as the battle to escape the lab intensifies."
+},
+"4-9": {
+  title: "Chapter Nine: The Piggyback",
+  description: "As Vecna’s plan unfolds, Eleven must use a risky strategy to save her friends."
+},
+"5-1": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-2": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-3": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-4": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-5": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-6": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-7": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-8": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-9": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+},
+"5-10": {
+  title: "TBA",
+  description: "Not released yet — sorry!"
+}
+
+};
+
+  function updateEpisodes() {
+  const season = document.getElementById("seasonSelect").value;
+  const episodeSelect = document.getElementById("episodeSelect");
+  episodeSelect.innerHTML = "";
+  const count = episodesPerSeason[season];
+
+  for (let i = 1; i <= count; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+
+    const watchedKey = `watched-${season}-${i}`;
+    const isWatched = localStorage.getItem(watchedKey) === "true";
+
+    if (season === "5") {
+      option.textContent = `❌ ${i} (Unavailable)`;
+      option.disabled = true;
+    } else {
+      option.textContent = isWatched ? `✅ ${i}` : `${i}`;
+    }
+
+    episodeSelect.appendChild(option);
+  }
+
+  updateEpisodeInfo();
+}
+
+function updateEpisodeInfo() {
+  const season = document.getElementById("seasonSelect").value;
+  const episode = document.getElementById("episodeSelect").value;
+  const key = `${season}-${episode}`;
+  const info = episodeData[key];
+  const container = document.getElementById("episodeInfo");
+  const watchButton = document.getElementById("watchButton");
+
+  if (season === "5") {
+    container.innerHTML = `<h2>Season 5 – Episode ${episode}</h2><p>This episode is not released yet — sorry!</p>`;
+    watchButton.disabled = true;
+    return;
+  }
+
+  if (info) {
+    container.innerHTML = `<h2>${info.title}</h2><p>${info.description}</p>`;
+    watchButton.disabled = false;
+
+    const watchedKey = `watched-${season}-${episode}`;
+    const isWatched = localStorage.getItem(watchedKey) === "true";
+    if (isWatched) {
+      container.innerHTML += `<p style="color: #00ff99;"><strong>✔ You’ve watched this episode</strong></p>`;
+    }
+  } else {
+    container.innerHTML = `<h2>Season ${season} – Episode ${episode}</h2><p>No description available yet.</p>`;
+    watchButton.disabled = false;
+  }
+}
+
+
+
+    function openInNewTab() {
+      const season = document.getElementById("seasonSelect").value;
+      const episode = document.getElementById("episodeSelect").value;
+      const key = `watched-${season}-${episode}`;
+      localStorage.setItem(key, "true");
+      const url = `https://multiembed.mov/directstream.php?video_id=tt4574334&s=${season}&e=${episode}`;
+      window.open(url, '_blank');
+      updateEpisodeInfo();
+    }
+
+    window.onload = () => {
+      updateEpisodes();
+      updateEpisodeInfo();
+    };
+  </script>
+</body>
+</html>
