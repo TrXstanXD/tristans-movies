@@ -1,0 +1,535 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <title>Watch The O.C.</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+.home-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #00b894;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  z-index: 1000;
+}
+.home-link:hover {
+  background-color: #019875;
+}
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    .controls {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    label {
+      font-size: 18px;
+    }
+    select, button {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #00b894;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #019875;
+    }
+    .episode-info {
+      margin-top: 25px;
+      max-width: 600px;
+    }
+    .episode-info h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .episode-info p {
+      font-size: 16px;
+      color: #cccccc;
+    }
+  </style>
+<style type="text/css" id="operaUserStyle"></style></head>
+<body>
+  <a href="https://trxstanxd.github.io/tristans-movies" class="home-link">🏠 Home</a>
+  <h1>The O.C Episode Picker</h1>
+  <div class="controls">
+    <label for="seasonSelect">Season:</label>
+    <select id="seasonSelect" onchange="updateEpisodes()">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+    <label for="episodeSelect">Episode:</label>
+    <select id="episodeSelect" onchange="updateEpisodeInfo()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option></select>
+    <button id="watchButton" onclick="openInNewTab()">Watch Now</button>
+
+  </div>
+  <div class="episode-info" id="episodeInfo"><h2>Season 1, Episode 1</h2><p>This is the description for Season 1, Episode 1 of The O.C.</p></div>
+  <script>
+    const episodesPerSeason = { "1": 27, "2": 24, "3": 25, "4": 16 };
+const episodeData = {
+  "1-1": {
+    title: "Pilot",
+    description: "Ryan Atwood, a troubled teen from Chino, is taken in by public defender Sandy Cohen and introduced to the wealthy world of Newport Beach."
+  },
+  "1-2": {
+    title: "The Model Home",
+    description: "Seth, Marissa, and Ryan hide in a vacant model home as Ryan tries to avoid foster care and a return to Chino."
+  },
+  "1-3": {
+    title: "The Gamble",
+    description: "Ryan’s mother comes back to take him home, causing conflict and uncertainty in his new life with the Cohens."
+  },
+  "1-4": {
+    title: "The Debut",
+    description: "Ryan is asked to escort a debutante to a cotillion, throwing him into Newport's elite social scene."
+  },
+  "1-5": {
+    title: "The Outsider",
+    description: "Ryan gets a job at the Crab Shack and befriends Donnie, whose influence leads to tension and bad decisions."
+  },
+  "1-6": {
+    title: "The Girlfriend",
+    description: "Kirsten’s father Caleb visits with his much younger girlfriend, causing chaos at a family party."
+  },
+  "1-7": {
+    title: "The Escape",
+    description: "A weekend trip to Tijuana spirals out of control, leading to a life-threatening situation for Marissa."
+  },
+  "1-8": {
+    title: "The Rescue",
+    description: "After Marissa’s overdose, Julie tries to take her away from Jimmy and Newport; Ryan and Seth intervene."
+  },
+  "1-9": {
+    title: "The Heights",
+    description: "Ryan starts working construction and suspects Luke is cheating on Marissa with his coworker."
+  },
+  "1-10": {
+    title: "The Perfect Couple",
+    description: "Seth tries to win Summer's heart while Ryan struggles to trust Marissa again."
+  },
+  "1-11": {
+    title: "The Homecoming",
+    description: "Ryan returns to Chino for Thanksgiving to help his brother Trey, while Seth juggles both Anna and Summer."
+  },
+  "1-12": {
+    title: "The Secret",
+    description: "Ryan finds out Luke is hiding something big, and it sends shockwaves through Harbor School."
+  },
+  "1-13": {
+    title: "The Best Chrismukkah Ever",
+    description: "Seth introduces Chrismukkah while tensions rise as Marissa's shoplifting habit is revealed."
+  },
+  "1-14": {
+    title: "The Countdown",
+    description: "On New Year’s Eve, Ryan struggles to tell Marissa how he feels while Kirsten is caught at a wild party."
+  },
+  "1-15": {
+    title: "The Third Wheel",
+    description: "Hailey returns and crashes Seth’s awkward double date with Summer and Anna."
+  },
+  "1-16": {
+    title: "The Links",
+    description: "Ryan and Luke are forced to team up at a charity golf tournament while Donnie stirs up trouble."
+  },
+  "1-17": {
+    title: "The Rivals",
+    description: "Oliver becomes increasingly close to Marissa, and Ryan becomes suspicious of his intentions."
+  },
+  "1-18": {
+    title: "The Truth",
+    description: "Oliver’s dangerous obsession is exposed, putting everyone at risk."
+  },
+  "1-19": {
+    title: "The Heartbreak",
+    description: "Valentine’s Day hits hard as Ryan tries to move on and Seth faces rejection from both girls."
+  },
+  "1-20": {
+    title: "The Telenovela",
+    description: "Ryan helps Theresa, an old flame from Chino, while Seth and Summer take their relationship to the next level."
+  },
+  "1-21": {
+    title: "The Goodbye Girl",
+    description: "Anna prepares to leave Newport and Seth is caught between feelings for her and Summer."
+  },
+  "1-22": {
+    title: "The L.A.",
+    description: "Ryan and Seth travel to Los Angeles with Summer and Marissa and get caught up in a soap opera-style mess."
+  },
+  "1-23": {
+    title: "The Nana",
+    description: "Sandy’s tough mother visits for Passover and surprises everyone with her true intentions."
+  },
+  "1-24": {
+    title: "The Proposal",
+    description: "Caleb proposes to Julie, and Marissa begins to spiral from the pressure of family secrets."
+  },
+  "1-25": {
+    title: "The Shower",
+    description: "Julie’s wedding shower creates drama as secrets and awkward reunions come to light."
+  },
+  "1-26": {
+    title: "The Strip",
+    description: "Sandy and Jimmy get into trouble in Vegas while the boys attend Caleb’s bachelor party."
+  },
+  "1-27": {
+    title: "The Ties That Bind",
+    description: "Ryan makes a heartbreaking decision that could tear him away from Newport forever."
+  },
+  "2-1": {
+    title: "The Distance",
+    description: "Ryan and Seth are living apart from Newport—until Seth’s escape forces Sandy to bring everyone home."
+  },
+  "2-2": {
+    title: "The Way We Were",
+    description: "Summer has moved on, Seth hasn’t; Ryan and Marissa struggle with the fallout of last season."
+  },
+  "2-3": {
+    title: "The New Kids on the Block",
+    description: "Seth gets a job and meets Alex, while Ryan is forced to work with a girl named Lindsay."
+  },
+  "2-4": {
+    title: "The New Era",
+    description: "Ryan and Lindsay go on a double date with Seth and Alex; Marissa starts seeing DJ again."
+  },
+  "2-5": {
+    title: "The SnO.C.",
+    description: "The winter dance stirs old emotions between Ryan and Marissa, and Seth's date with Alex ends awkwardly."
+  },
+  "2-6": {
+    title: "The Chrismukkah That Almost Wasn't",
+    description: "Chrismukkah is threatened by a paternity mystery involving Caleb, Julie, and Lindsay."
+  },
+  "2-7": {
+    title: "The Family Ties",
+    description: "Ryan meets Lindsay’s mother, and the truth about her father shakes up everything."
+  },
+  "2-8": {
+    title: "The Power of Love",
+    description: "Kirsten and Sandy renew their vows, while Seth's obsession with Alex strains their relationship."
+  },
+  "2-9": {
+    title: "The Ex-Factor",
+    description: "Marissa and Ryan face tension with Lindsay, while Seth’s jealousy grows over Alex's ex."
+  },
+  "2-10": {
+    title: "The Accomplice",
+    description: "Seth meddles in Sandy’s case, while Ryan tries to reunite Lindsay and her dad."
+  },
+  "2-11": {
+    title: "The Second Chance",
+    description: "Ryan gets caught between Lindsay and Caleb; Sandy has a moral dilemma at work."
+  },
+  "2-12": {
+    title: "The Lonely Hearts Club",
+    description: "Valentine’s Day in Newport brings breakups, makeups, and a bar brawl."
+  },
+  "2-13": {
+    title: "The Test",
+    description: "Kirsten learns shocking news about her father, and Marissa discovers something about herself."
+  },
+  "2-14": {
+    title: "The Rainy Day Women",
+    description: "Seth makes a grand romantic gesture; Ryan and Lindsay face a major decision."
+  },
+  "2-15": {
+    title: "The Mallpisode",
+    description: "The core four get locked inside a mall and reminisce about their relationships."
+  },
+  "2-16": {
+    title: "The Blaze of Glory",
+    description: "Ryan and Marissa try friendship again, but a fire at a pep rally puts that to the test."
+  },
+  "2-17": {
+    title: "The Brothers Grim",
+    description: "Ryan’s brother Trey is released from jail and moves in with the Cohens."
+  },
+  "2-18": {
+    title: "The Risky Business",
+    description: "Sandy’s charity auction gets out of hand; Seth and Zach compete for Summer's attention."
+  },
+  "2-19": {
+    title: "The Rager",
+    description: "Marissa throws a party for Trey that ends in violence, while Seth ruins a comic deal."
+  },
+  "2-20": {
+    title: "The O.C. Confidential",
+    description: "Ryan and Seth investigate Trey’s fight, and Sandy suspects Caleb of something illegal."
+  },
+  "2-21": {
+    title: "The Return of the Nana",
+    description: "Sandy’s mom visits with big news; Seth gets caught between Summer and Zach—again."
+  },
+  "2-22": {
+    title: "The Showdown",
+    description: "Ryan discovers the truth about Marissa and Trey, leading to a deadly confrontation."
+  },
+  "2-23": {
+    title: "The O.Sea",
+    description: "Julie and Caleb’s wedding hits turbulence; Marissa struggles to cope with Trey."
+  },
+  "2-24": {
+    title: "The Dearly Beloved",
+    description: "Everything explodes when Ryan confronts Trey in the explosive season finale."
+  },
+  "3-1": {
+    title: "The Aftermath",
+    description: "Trey lies unconscious in the hospital as Ryan and Marissa deal with the consequences of the shooting."
+  },
+  "3-2": {
+    title: "The Shape of Things to Come",
+    description: "Marissa is expelled, Ryan tries to return to Harbor, and a new dean shakes things up."
+  },
+  "3-3": {
+    title: "The End of Innocence",
+    description: "Julie and Jimmy face financial ruin, and Marissa begins a new life at public school."
+  },
+  "3-4": {
+    title: "The Last Waltz",
+    description: "Marissa adjusts to her new school; Summer faces off with Taylor Townsend."
+  },
+  "3-5": {
+    title: "The Perfect Storm",
+    description: "Ryan considers dropping out to support Marissa, while Sandy offers an alternative."
+  },
+  "3-6": {
+    title: "The Swells",
+    description: "Marissa befriends a rebellious surfer; Seth gets caught lying to Summer."
+  },
+  "3-7": {
+    title: "The Anger Management",
+    description: "Ryan tries to stay out of fights but can't avoid trouble with Marissa’s new crowd."
+  },
+  "3-8": {
+    title: "The Game Plan",
+    description: "College application stress sets in; Ryan and Marissa consider separate futures."
+  },
+  "3-9": {
+    title: "The Disconnect",
+    description: "Sandy clashes with Matt over moral decisions, and Ryan gets a job with a contractor."
+  },
+  "3-10": {
+    title: "The Chrismukkah Bar Mitz-vahkkah",
+    description: "Seth throws a Bar Mitzvah for Ryan to raise money for Johnny's surgery."
+  },
+  "3-11": {
+    title: "The Safe Harbor",
+    description: "Summer and Seth help Marissa fight to return to Harbor; Taylor shows her support."
+  },
+  "3-12": {
+    title: "The Sister Act",
+    description: "Kaitlin Cooper returns to Newport and stirs up trouble for Marissa and Julie."
+  },
+  "3-13": {
+    title: "The Pot Stirrer",
+    description: "Kaitlin plays mind games with Marissa and Johnny while Ryan grows suspicious."
+  },
+  "3-14": {
+    title: "The Cliffhanger",
+    description: "Johnny’s mental state worsens, leading to a tragic and sudden decision."
+  },
+  "3-15": {
+    title: "The Heavy Lifting",
+    description: "The gang copes with Johnny’s death; Kaitlin uses his funeral for attention."
+  },
+  "3-16": {
+    title: "The Road Warrior",
+    description: "Ryan visits Sadie in Chino and begins questioning his future with Marissa."
+  },
+  "3-17": {
+    title: "The Journey",
+    description: "Ryan’s birthday sparks reflection on how far he’s come—and who he wants to be with."
+  },
+  "3-18": {
+    title: "The Undertow",
+    description: "Ryan tries to help Sadie with her problem ex; Marissa’s jealousy surfaces."
+  },
+  "3-19": {
+    title: "The Secrets and Lies",
+    description: "Summer finds out Seth lied about college; Ryan and Sadie struggle to stay together."
+  },
+  "3-20": {
+    title: "The Day After Tomorrow",
+    description: "College decisions shake up the group; Marissa considers leaving Newport."
+  },
+  "3-21": {
+    title: "The Dawn Patrol",
+    description: "Ryan visits his mother in Albuquerque; Volchok pressures Marissa into partying again."
+  },
+  "3-22": {
+    title: "The College Try",
+    description: "Everyone visits Berkeley; relationships are tested as college approaches."
+  },
+  "3-23": {
+    title: "The Party Favor",
+    description: "The Harbor prom brings drama, jealousy, and heartbreak to Newport one last time."
+  },
+  "3-24": {
+    title: "The Man of the Year",
+    description: "Caleb’s legacy causes a power struggle; Sandy’s ethics are tested again."
+  },
+  "3-25": {
+    title: "The Graduates",
+    description: "Graduation day arrives, and a shocking tragedy ends the season with a devastating goodbye."
+  },
+  "4-1": {
+    title: "The Avengers",
+    description: "Ryan isolates himself after Marissa’s death, but Summer and Seth try to help him reconnect."
+  },
+  "4-2": {
+    title: "The Gringos",
+    description: "Seth and Ryan head to Mexico in search of Volchok, seeking closure—and maybe revenge."
+  },
+  "4-3": {
+    title: "The Cold Turkey",
+    description: "Ryan unexpectedly finds himself having Thanksgiving dinner with the Cohens—and Volchok."
+  },
+  "4-4": {
+    title: "The Metamorphosis",
+    description: "Summer returns to her old life; Seth reconnects with Taylor, who is recovering from injury."
+  },
+  "4-5": {
+    title: "The Sleeping Beauty",
+    description: "Taylor develops feelings for Ryan; Summer struggles to balance activism with real life."
+  },
+  "4-6": {
+    title: "The Summer Bummer",
+    description: "Taylor helps Ryan confront Marissa’s memory while Seth gets caught lying to Summer."
+  },
+  "4-7": {
+    title: "The Chrismukk-huh?",
+    description: "A holiday mishap transports Ryan and Taylor into an alternate universe where everything has changed."
+  },
+  "4-8": {
+    title: "The Earth Girls Are Easy",
+    description: "Taylor’s ex-husband returns; Seth and Summer confront new challenges in their relationship."
+  },
+  "4-9": {
+    title: "The My Two Dads",
+    description: "Kaitlin acts out while Ryan balances father figures Sandy and Frank Atwood."
+  },
+  "4-10": {
+    title: "The French Connection",
+    description: "Taylor’s mother arrives and disapproves of her new romance; Ryan makes a big decision."
+  },
+  "4-11": {
+    title: "The Dream Lover",
+    description: "Taylor thinks Ryan doesn’t love her; Seth and Summer’s engagement brings tension."
+  },
+  "4-12": {
+    title: "The Groundhog Day",
+    description: "Sandy’s birthday turns into a comedy of errors as secrets are revealed."
+  },
+  "4-13": {
+    title: "The Case of the Franks",
+    description: "Frank tries to win over the family; Seth and Summer revisit their past and future."
+  },
+  "4-14": {
+    title: "The Shake Up",
+    description: "An earthquake hits Newport, causing emotional and physical aftershocks for everyone."
+  },
+  "4-15": {
+    title: "The Night Moves",
+    description: "The aftermath of the quake draws everyone closer, and new beginnings are formed."
+  },
+  "4-16": {
+    title: "The End's Not Near, It's Here",
+    description: "In the series finale, the group says goodbye to Newport and looks ahead to the future."
+  }
+
+};
+
+
+function updateEpisodes() {
+  const season = document.getElementById("seasonSelect").value;
+  const episodeSelect = document.getElementById("episodeSelect");
+  episodeSelect.innerHTML = "";
+  const count = episodesPerSeason[season];
+  for (let i = 1; i <= count; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+
+    const watchedKey = `watched-${season}-${i}`;
+    const isWatched = localStorage.getItem(watchedKey) === "true";
+    option.textContent = isWatched ? `✅ ${i}` : `${i}`;
+
+    episodeSelect.appendChild(option);
+  }
+  updateEpisodeInfo();
+}
+
+
+function updateEpisodeInfo() {
+  const season = document.getElementById("seasonSelect").value;
+  const episode = document.getElementById("episodeSelect").value;
+  const key = `${season}-${episode}`;
+  const info = episodeData[key];
+  const container = document.getElementById("episodeInfo");
+  const watchButton = document.getElementById("watchButton");
+
+  if (info) {
+    container.innerHTML = `<h2>${info.title}</h2><p>${info.description}</p>`;
+    if (season === "8" && episode === "10") {
+      watchButton.disabled = false;
+    } else {
+      watchButton.disabled = false;
+    }
+
+    const watchedKey = `watched-${season}-${episode}`;
+    const isWatched = localStorage.getItem(watchedKey) === "true";
+    if (isWatched) {
+      container.innerHTML += `<p style="color: #00ff99;"><strong>✔ You’ve watched this episode</strong></p>`;
+    }
+  } else {
+    container.innerHTML = `<h2>Season ${season} – Episode ${episode}</h2><p>No description available yet.</p>`;
+    watchButton.disabled = false;
+  }
+}
+
+
+    function openInNewTab() {
+  const season = document.getElementById("seasonSelect").value;
+  const episode = document.getElementById("episodeSelect").value;
+  const key = `watched-${season}-${episode}`;
+  localStorage.setItem(key, "true");
+
+  const url = `https://multiembed.mov/directstream.php?video_id=tt0362359&s=${season}&e=${episode}`;
+  window.open(url, '_blank');
+
+  updateEpisodeInfo(); // refresh UI
+}
+
+
+window.onload = () => {
+  updateEpisodes();
+  updateEpisodeInfo();
+};
+
+  </script>
+
+</body></html>
