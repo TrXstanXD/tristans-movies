@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Animated Hover Buttons</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      font-size: 48px;
+      color: #ccc;
+      margin-bottom: 40px;
+      transition: all 1s ease-in-out;
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .section-button {
+      position: relative;
+      width: 240px;
+      height: 340px;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .section-button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: 0;
+    }
+
+    .section-button:hover {
+      transform: scale(1.05);
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      text-align: center;
+      z-index: 1;
+    }
+
+    .overlay h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .overlay p {
+      margin: 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .disclaimer {
+      margin-top: 60px;
+      font-size: 16px;
+      color: #ff4d4d;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="pageTitle">Tristan's Movies</h1>
+
+  <div class="button-container">
+    <a href="/movies" class="section-button" id="movieBtn">
+      <div class="overlay">
+        <h2>Movies</h2>
+        <p>Explore a wide selection of films</p>
+      </div>
+    </a>
+
+    <a href="/shows" class="section-button" id="showsBtn">
+      <div class="overlay">
+        <h2>Shows</h2>
+        <p>Watch your favorite series anytime</p>
+      </div>
+    </a>
+
+    <a href="/anime" class="section-button" id="animeBtn">
+      <div class="overlay">
+        <h2>Anime</h2>
+        <p>Dive into the world of anime adventures</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="disclaimer">
+    DO NOT USE WITHOUT AN ADBLOCKER OR POPUP BLOCKER LIKE UBLOCK ORIGIN BECAUSE YOU WILL GET WEIRD POPUPS TO INNAPPROPRIATE WEBSITES OR VIRUS LINKS, PLEASE USE AN ADBLOCKER
+  </div>
+
+  <script>
+    const imageRotators = [
+      {
+        id: "movieBtn",
+        images: [
+          "https://m.media-amazon.com/images/I/613ypTLZHsL._UF894,1000_QL80_.jpg",
+          "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
+          "https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/02/23130935/n0ybibhJtQ5icDqTp8eRytcIHJx-scaled.jpg"
+        ]
+      },
+      {
+        id: "showsBtn",
+        images: [
+          "https://m.media-amazon.com/images/I/81YuxdsIuoL._UF894,1000_QL80_.jpg",
+          "https://m.media-amazon.com/images/M/MV5BNWUzMDViY2YtOGE0OS00NWFhLWJhM2ItNDE2Njc5YmRjZWQyXkEyXkFqcGc@._V1_.jpg",
+          "https://lh5.googleusercontent.com/proxy/kpM6xVrudASvB0t2crb16zPh0J4uZNkclLwt-G_8MNqkXJmuxfFUYiHRHNFcPdy1EDyCH9-SCn7u8kCIt0AxJBkgkVdQaFVTAEyqcYFXpprJ3Y3AJgNWMamFLU0a2ARdqsGy8W3UkKNO4qnK7hWDgGg-iYX1UZWUfSY6dZ-J_C5rr_pfiau8"
+        ]
+      },
+      {
+        id: "animeBtn",
+        images: [
+          "https://m.media-amazon.com/images/I/81A9J6Szk1L._AC_UF894,1000_QL80_.jpg",
+          "https://m.media-amazon.com/images/I/61z1p5smUpL.jpg",
+          "https://m.media-amazon.com/images/I/81ypOqgR9-L._AC_UF1000,1000_QL80_.jpg"
+        ]
+      }
+    ];
+
+    imageRotators.forEach(rotator => {
+      let index = 0;
+      const element = document.getElementById(rotator.id);
+      const nextLayer = document.createElement("div");
+      nextLayer.classList.add("fade-layer");
+      nextLayer.style.position = "absolute";
+      nextLayer.style.top = 0;
+      nextLayer.style.left = 0;
+      nextLayer.style.right = 0;
+      nextLayer.style.bottom = 0;
+      nextLayer.style.backgroundSize = "cover";
+      nextLayer.style.backgroundPosition = "center";
+      nextLayer.style.transition = "opacity 1s ease-in-out";
+      nextLayer.style.zIndex = 0;
+      element.appendChild(nextLayer);
+
+      element.style.backgroundImage = `url('${rotator.images[0]}')`;
+      setInterval(() => {
+        index = (index + 1) % rotator.images.length;
+        nextLayer.style.backgroundImage = `url('${rotator.images[index]}')`;
+        nextLayer.style.opacity = 1;
+        setTimeout(() => {
+          element.style.backgroundImage = `url('${rotator.images[index]}')`;
+          nextLayer.style.opacity = 0;
+        }, 1000);
+      }, 2500);
+    });
+
+    const fonts = [
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      "'Courier New', Courier, monospace",
+      "'Georgia', serif",
+      "'Trebuchet MS', sans-serif",
+      "'Lucida Console', Monaco, monospace"
+    ];
+
+    let fontIndex = 0;
+    const title = document.getElementById("pageTitle");
+    setInterval(() => {
+      fontIndex = (fontIndex + 1) % fonts.length;
+      title.style.opacity = 0;
+      setTimeout(() => {
+        title.style.fontFamily = fonts[fontIndex];
+        title.style.opacity = 1;
+      }, 500);
+    }, 3000);
+  </script>
+</body>
+</html>
