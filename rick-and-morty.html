@@ -1,0 +1,548 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <title>Watch Rick and Morty</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .home-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #00b894;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      z-index: 1000;
+    }
+    .home-link:hover {
+      background-color: #019875;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    .controls {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    label {
+      font-size: 18px;
+    }
+    select, button {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #00b894;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+    }
+    button:hover:enabled {
+      background-color: #019875;
+    }
+    .episode-info {
+      margin-top: 25px;
+      max-width: 600px;
+    }
+    .episode-info h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .episode-info p {
+      font-size: 16px;
+      color: #cccccc;
+    }
+  </style>
+<style type="text/css" id="operaUserStyle"></style></head>
+<body>
+   <a href="https://trxstanxd.github.io/tristans-movies" class="home-link">🏠 Home</a>
+  <h1>Rick and Morty Episode Picker</h1>
+  <div class="controls">
+    <label for="seasonSelect">Season:</label>
+    <select id="seasonSelect" onchange="updateEpisodes()">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select>
+    <label for="episodeSelect">Episode:</label>
+    <select id="episodeSelect" onchange="updateEpisodeInfo()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+    <button id="watchButton" onclick="openInNewTab()">Watch Now</button>
+  </div>
+  <div class="episode-info" id="episodeInfo"><h2>Season 8, Episode 3</h2><p>This is the description for Season 8, Episode 3 of Rick and Morty.</p></div>
+  <script>
+    const episodesPerSeason = {
+
+  "1": 11,
+  "2": 10,
+  "3": 10,
+  "4": 10,
+  "5": 10,
+  "6": 10,
+  "7": 10,
+  "8": 10
+};
+const episodeData = {
+  "1-1": {
+    title: "Pilot",
+    description: "Rick takes Morty on a dangerous mission to another dimension to harvest seeds for his research."
+  },
+  "1-2": {
+    title: "Lawnmower Dog",
+    description: "Rick helps Jerry with the family dog, but things spiral when the dog becomes hyper-intelligent."
+  },
+  "1-3": {
+    title: "Anatomy Park",
+    description: "Rick miniaturizes Morty to explore a microscopic amusement park inside a homeless man."
+  },
+  "1-4": {
+    title: "M. Night Shaym-Aliens!",
+    description: "Rick and Jerry are trapped in a simulation run by alien scammers trying to steal Rick’s secrets."
+  },
+  "1-5": {
+    title: "Meeseeks and Destroy",
+    description: "Rick gives the family a Meeseeks box to solve their problems while he and Morty go on a quest."
+  },
+  "1-6": {
+    title: "Rick Potion #9",
+    description: "A love potion backfires and creates a mutant apocalypse, forcing Rick and Morty to abandon their dimension."
+  },
+  "1-7": {
+    title: "Raising Gazorpazorp",
+    description: "Morty raises an alien child while Rick deals with a matriarchal alien society."
+  },
+  "1-8": {
+    title: "Rixty Minutes",
+    description: "The family watches interdimensional cable TV while exploring what their lives could have been."
+  },
+  "1-9": {
+    title: "Something Ricked This Way Comes",
+    description: "Rick battles the Devil in a pawn shop while Jerry tries to prove Pluto is still a planet."
+  },
+  "1-10": {
+    title: "Close Rick-Counters of the Rick Kind",
+    description: "Rick is accused of crimes by the Council of Ricks and must clear his name with Morty’s help."
+  },
+  "1-11": {
+    title: "Ricksy Business",
+    description: "With the adults away, Rick and Summer throw a wild party that threatens to destroy the house and reality."
+  },
+  "2-1": {
+    title: "A Rickle in Time",
+    description: "Rick, Morty, and Summer accidentally fracture time after freezing it, creating dangerous time splits."
+  },
+  "2-2": {
+    title: "Mortynight Run",
+    description: "Rick sells a gun to an assassin and leaves Morty to protect a sentient gas creature."
+  },
+  "2-3": {
+    title: "Auto Erotic Assimilation",
+    description: "Rick reunites with a hive mind ex-girlfriend named Unity; Jerry and Beth confront their codependency."
+  },
+  "2-4": {
+    title: "Total Rickall",
+    description: "The house is overrun by parasites that implant fake memories, causing chaos among the family."
+  },
+  "2-5": {
+    title: "Get Schwifty",
+    description: "Earth is forced to compete in an intergalactic music competition to avoid destruction."
+  },
+  "2-6": {
+    title: "The Ricks Must Be Crazy",
+    description: "Rick's car battery is actually a miniature universe, which he and Morty must explore to fix it."
+  },
+  "2-7": {
+    title: "Big Trouble in Little Sanchez",
+    description: "Rick transfers his consciousness into a younger clone to help Summer and Morty at school."
+  },
+  "2-8": {
+    title: "Interdimensional Cable 2: Tempting Fate",
+    description: "The family watches more interdimensional TV while Jerry is hospitalized for a space parasite."
+  },
+  "2-9": {
+    title: "Look Who’s Purging Now",
+    description: "Rick and Morty get caught up in a planet’s annual purge, where all crime is legal for one night."
+  },
+  "2-10": {
+    title: "The Wedding Squanchers",
+    description: "The family attends Birdperson’s wedding, which turns into a deadly trap orchestrated by the Galactic Federation."
+  },
+  "3-1": {
+    title: "The Rickshank Rickdemption",
+    description: "Rick escapes from prison, dismantles the Galactic Federation, and ruins Jerry’s marriage."
+  },
+  "3-2": {
+    title: "Rickmancing the Stone",
+    description: "The family visits a post-apocalyptic wasteland where Morty and Summer cope with their parents’ divorce."
+  },
+  "3-3": {
+    title: "Pickle Rick",
+    description: "Rick turns himself into a pickle to avoid family therapy, leading to a bloody sewer adventure."
+  },
+  "3-4": {
+    title: "Vindicators 3: The Return of Worldender",
+    description: "Rick and Morty join a team of superheroes but end up surviving Rick’s deadly party games."
+  },
+  "3-5": {
+    title: "The Whirly Dirly Conspiracy",
+    description: "Rick takes Jerry on a dangerous alien adventure to boost his self-esteem."
+  },
+  "3-6": {
+    title: "Rest and Ricklaxation",
+    description: "Rick and Morty detox their minds at an alien spa, but their toxic personalities fight back."
+  },
+  "3-7": {
+    title: "The Ricklantis Mixup",
+    description: "Instead of Atlantis, the episode follows life on the Citadel of Ricks and a dark political uprising."
+  },
+  "3-8": {
+    title: "Morty’s Mind Blowers",
+    description: "Rick reveals a vault of erased memories that Morty couldn't handle the first time around."
+  },
+  "3-9": {
+    title: "The ABC’s of Beth",
+    description: "Beth reconnects with her childhood imaginary world while questioning her identity."
+  },
+  "3-10": {
+    title: "The Rickchurian Mortydate",
+    description: "Rick battles the President of the United States while the family pushes to be normal again."
+  },
+  "4-1": {
+    title: "Edge of Tomorty: Rick Die Rickpeat",
+    description: "Rick gives Morty death crystals that show potential futures, leading to a deadly obsession."
+  },
+  "4-2": {
+    title: "The Old Man and the Seat",
+    description: "Rick goes on a private mission to protect his favorite toilet while Jerry launches an app with an alien intern."
+  },
+  "4-3": {
+    title: "One Crew Over the Crewcoo's Morty",
+    description: "A series of elaborate heists leads Rick to wage war on heist movies and their clichés."
+  },
+  "4-4": {
+    title: "Claw and Hoarder: Special Ricktim's Morty",
+    description: "Rick gives Morty a dragon, but their bond becomes more than magical while Jerry meets a talking cat."
+  },
+  "4-5": {
+    title: "Rattlestar Ricklactica",
+    description: "Morty is bitten by a space snake, which sparks a time-traveling war among snake civilizations."
+  },
+  "4-6": {
+    title: "Never Ricking Morty",
+    description: "Rick and Morty get trapped on a story train filled with meta-narratives and bizarre plot loops."
+  },
+  "4-7": {
+    title: "Promortyus",
+    description: "Rick and Morty escape from an alien facehugger planet and try to undo the havoc they caused."
+  },
+  "4-8": {
+    title: "The Vat of Acid Episode",
+    description: "Rick creates a fake acid vat and a save-point device that backfires emotionally on Morty."
+  },
+  "4-9": {
+    title: "Childrick of Mort",
+    description: "Rick discovers he fathered a planet full of children and must co-parent with an ex-goddess."
+  },
+  "4-10": {
+    title: "Star Mort Rickturn of the Jerri",
+    description: "Beth meets her clone while Rick faces judgment from the family after a galactic showdown."
+  },
+  "5-1": {
+    title: "Mort Dinner Rick Andre",
+    description: "Rick hosts a dinner for his nemesis Mr. Nimbus while Morty tries to balance a date and a collapsing time realm."
+  },
+  "5-2": {
+    title: "Mortyplicity",
+    description: "The Smith family realizes they’re just one of many decoy families as decoys hunt decoys."
+  },
+  "5-3": {
+    title: "A Rickconvenient Mort",
+    description: "Morty falls for a female Captain Planet parody while Rick and Summer party across apocalypses."
+  },
+  "5-4": {
+    title: "Rickdependence Spray",
+    description: "A gross science accident leads to a war with mutant sperm after Morty misuses a horse breeding machine."
+  },
+  "5-5": {
+    title: "Amortycan Grickfitti",
+    description: "Morty and Summer try to impress a cool kid with Rick’s flying car while Jerry has an awkward guys' night."
+  },
+  "5-6": {
+    title: "Rick & Morty's Thanksploitation Spectacular",
+    description: "Rick turns himself into a turkey to get a presidential pardon, but it spirals into chaos."
+  },
+  "5-7": {
+    title: "Gotron Jerrysis Rickvangelion",
+    description: "Rick obsesses over collecting giant robotic ferrets, forming a Voltron-style team with unintended consequences."
+  },
+  "5-8": {
+    title: "Rickternal Friendshine of the Spotless Mort",
+    description: "Rick enters Birdperson’s mind to save him, confronting his own emotions and memories."
+  },
+  "5-9": {
+    title: "Forgetting Sarick Mortshall",
+    description: "Rick and Morty go on separate adventures after their toxic codependency hits a breaking point."
+  },
+  "5-10": {
+    title: "Rickmurai Jack",
+    description: "Rick battles through a Citadel full of Ricks to confront his past, and Evil Morty reveals a multiverse-shattering truth."
+  },
+  "6-1": {
+    title: "Solaricks",
+    description: "Rick and Morty become unstuck in their realities and must return to their original timelines."
+  },
+  "6-2": {
+    title: "Rick: A Mort Well Lived",
+    description: "While Morty is trapped in a video game, Rick must retrieve him by negotiating with NPCs."
+  },
+  "6-3": {
+    title: "Bethic Twinstinct",
+    description: "Beth and her clone begin a romantic relationship; Thanksgiving dinner gets very weird."
+  },
+  "6-4": {
+    title: "Night Family",
+    description: "Rick invents a machine to make his sleeping self do chores, leading to a war between Day and Night people."
+  },
+  "6-5": {
+    title: "Final DeSmithation",
+    description: "A fortune cookie sends Jerry on a bizarre path, exposing a dark secret about fate and incest."
+  },
+  "6-6": {
+    title: "JuRicksic Mort",
+    description: "Dinosaurs return to Earth claiming superiority, prompting Rick to challenge them to a creative showdown."
+  },
+  "6-7": {
+    title: "Full Meta Jackrick",
+    description: "Rick and Morty confront meta-narratives, breaking the fourth wall harder than ever."
+  },
+  "6-8": {
+    title: "Analyze Piss",
+    description: "Rick grows tired of fighting random villains and tries therapy instead, with unexpected results."
+  },
+  "6-9": {
+    title: "A Rick in King Mortur's Mort",
+    description: "Morty joins a knightly order in the Sun Kingdom, forcing Rick to question their bond."
+  },
+  "6-10": {
+    title: "Ricktional Mortpoon’s Rickmas Mortcation",
+    description: "Morty gets a gift that reveals Rick’s secrets, and the holiday season turns into a multiverse mess."
+  },
+  "7-1": {
+    title: "How Poopy Got His Poop Back",
+    description: "Rick helps Mr. Poopybutthole confront his personal issues during a wild, drunken adventure."
+  },
+  "7-2": {
+    title: "The Jerrick Trap",
+    description: "Jerry and Rick are forced to merge their minds while the rest of the family tries to stay sane."
+  },
+  "7-3": {
+    title: "Air Force Wong",
+    description: "President Curtis recruits Rick and Dr. Wong for a top-secret government mission gone wrong."
+  },
+  "7-4": {
+    title: "That's Amorte",
+    description: "Morty falls in love with a girl made of spaghetti while Rick deals with culinary horrors."
+  },
+  "7-5": {
+    title: "Unmortricken",
+    description: "Evil Morty returns and forces Rick to confront the darkest chapter of his past."
+  },
+  "7-6": {
+    title: "Rickfending Your Mort",
+    description: "Morty goes on trial for crimes across the multiverse, and Rick becomes his reluctant lawyer."
+  },
+  "7-7": {
+    title: "Wet Kuat Amortican Summer",
+    description: "The family joins a chaotic summer camp dimension full of deadly counselors and puberty jokes."
+  },
+  "7-8": {
+    title: "Rise of the Numbericons: The Movie",
+    description: "Rick and Morty are trapped in a parody of epic movie universes populated by sentient numbers."
+  },
+  "7-9": {
+    title: "Mort: Ragnarick",
+    description: "Morty becomes a Norse god after stealing a cosmic relic, and Rick must de-power him before it’s too late."
+  },
+  "7-10": {
+    title: "Fear No Mort",
+    description: "Rick uses Morty’s nightmares to unlock ancient secrets and destroy a psychic monster before it escapes."
+  },
+  "8-1": {
+    title: "The Great Yokel War",
+    description: "Rick and Morty infiltrate an intergalactic hillbilly feud where moonshine is weaponized."
+  },
+  "8-2": {
+    title: "Mortycan Idol",
+    description: "Morty becomes a viral star in a dystopian galaxy where clout is currency—and death comes with downvotes."
+  },
+  "8-3": {
+    title: "Grandpa Fight Club",
+    description: "Rick is recruited into a brutal underground league of fighting grandpas from across dimensions."
+  },
+  "8-4": {
+    title: "Wubba Lubba Lobotomy",
+    description: "Rick undergoes a voluntary brain surgery to remove his own guilt—but chaos leaks out instead."
+  },
+  "8-5": {
+    title: "The Council of Jerrys",
+    description: "A pan-dimensional league of Jerrys seeks to enforce order, and Jerry suddenly becomes the key to it all."
+  },
+  "8-6": {
+    title: "Get Schwifty 2: Electric Boogaloo",
+    description: "A new music god threatens Earth unless Rick, Morty, and Ice-T reunite the original band."
+  },
+  "8-7": {
+    title: "Infinite Beth",
+    description: "Beth gets lost in the Beth-verse while Summer and Morty try to rescue her through fractured timelines."
+  },
+  "8-8": {
+    title: "Planet of the Ricks",
+    description: "A planet full of Ricks declares independence from the Citadel—sparking war and bureaucracy."
+  },
+  "8-9": {
+    title: "The Meeseeks Multiplier",
+    description: "Rick’s new Meeseeks box creates recursive helpers, flooding the multiverse with chaos."
+  },
+  "8-10": {
+    title: "Hot Rick",
+    description: "Releases July 27, 2025"
+  }
+
+};
+
+function updateEpisodes(selectedEpisode = "1") {
+  const season = document.getElementById("seasonSelect").value;
+  const episodeSelect = document.getElementById("episodeSelect");
+  episodeSelect.innerHTML = "";
+  const count = episodesPerSeason[season];
+
+  for (let i = 1; i <= count; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+
+    const watchedKey = `watched-${season}-${i}`;
+    const isWatched = localStorage.getItem(watchedKey) === "true";
+    option.textContent = isWatched ? `✅ ${i}` : `${i}`;
+
+    if (i.toString() === selectedEpisode) {
+      option.selected = true;
+    }
+
+    episodeSelect.appendChild(option);
+  }
+}
+
+
+
+function updateEpisodeInfo() {
+  const season = document.getElementById("seasonSelect").value;
+  const episode = document.getElementById("episodeSelect").value;
+  const key = `${season}-${episode}`;
+  const info = episodeData[key];
+  const container = document.getElementById("episodeInfo");
+  const watchButton = document.getElementById("watchButton");
+
+  if (info) {
+    container.innerHTML = `<h2>${info.title}</h2><p>${info.description}</p>`;
+    if (season === "8" && episode === "10") {
+      watchButton.disabled = true;
+    } else {
+      watchButton.disabled = false;
+    }
+
+    const watchedKey = `watched-${season}-${episode}`;
+    const isWatched = localStorage.getItem(watchedKey) === "true";
+    if (isWatched) {
+      container.innerHTML += `<p style="color: #00ff99;"><strong>✔ You’ve watched this episode</strong></p>`;
+    }
+  } else {
+    container.innerHTML = `<h2>Season ${season} – Episode ${episode}</h2><p>No description available yet.</p>`;
+    watchButton.disabled = false;
+  }
+}
+
+
+function openInNewTab() {
+  const season = document.getElementById("seasonSelect").value;
+  const episode = document.getElementById("episodeSelect").value;
+  const key = `watched-${season}-${episode}`;
+  localStorage.setItem(key, "true");
+  localStorage.setItem("lastWatched", `${season}-${episode}`);
+
+  const url = `https://multiembed.mov/directstream.php?video_id=tt2861424&s=${season}&e=${episode}`;
+  window.open(url, '_blank');
+
+  updateEpisodeInfo();
+}
+
+
+
+
+window.onload = () => {
+  const lastWatched = localStorage.getItem("lastWatched");
+
+  if (lastWatched) {
+    const [season, episode] = lastWatched.split("-");
+    document.getElementById("seasonSelect").value = season;
+
+    const next = getNextEpisode(season, episode);
+    document.getElementById("seasonSelect").value = next.season;
+    updateEpisodes(next.episode);
+    updateEpisodeInfo();
+  } else {
+    updateEpisodes(); // fallback
+    updateEpisodeInfo();
+  }
+};
+
+
+function getNextEpisode(currentSeason, currentEpisode) {
+  let s = parseInt(currentSeason);
+  let e = parseInt(currentEpisode);
+
+  while (true) {
+    e++;
+    if (e > episodesPerSeason[s]) {
+      s++;
+      e = 1;
+      if (!episodesPerSeason[s]) break; // no more seasons
+    }
+    const key = `watched-${s}-${e}`;
+    if (localStorage.getItem(key) !== "true") {
+      return { season: s.toString(), episode: e.toString() };
+    }
+  }
+
+  // If all episodes are watched, return the last watched
+  return { season: currentSeason, episode: currentEpisode };
+}
+
+  </script>
+
+</body></html>
